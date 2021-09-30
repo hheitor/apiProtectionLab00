@@ -1,7 +1,7 @@
 # apiProtectionLabDRAFT
 # Protecting APIs in Azure  with F5#
 
-Welcome to API protection Lab. This time you'll work with GraphQL APIs running in azure ACS
+Welcome to API protection Lab. This time you'll work with GraphQL APIs running in an ACI (Azure Container Instance)
 
 # Pre-requisites
 - An azure account
@@ -35,7 +35,7 @@ New-AzSubscriptionDeployment `
   -rgLocation $location `
   -rgName '<YOUR INITIALS HERE>apiprotlab'
   
-  # Task 2 -  Deploy DVGA - GraphQL App
+  # Task 2 -  Deploy DVGA - GraphQL App in an Azure Container Instance
   # Task 3 -  Do some attacks
     try...
      what else is needed?
