@@ -7,9 +7,9 @@ Welcome to API protection Lab. This time you'll work with GraphQL APIs running i
 - An azure account
 - F5 Advanced WAF BIG-IP Trial License
 
-#GOAL: #
+# GOAL: 
 
-Protect vulnerable GraphQL APIs running in an Azure Container Instance
+Protect vulnerable GraphQL APIs running in an Azure Container Instance with F5 Advanced WAF
 
 # Activities: #
 
