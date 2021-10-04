@@ -40,7 +40,7 @@ Get-AzLocation | select displayname,location
 
  create an Azure Resource Group
 
-# $location = '<Azure region>'
+$location = '<Azure region>'
 New-AzSubscriptionDeployment `
   -Location $location `
   -Name <YOUR INITIALS HERE>apiprotlabrgdeploy `
@@ -48,7 +48,8 @@ New-AzSubscriptionDeployment `
   -rgLocation $location `
   -rgName '<YOUR INITIALS HERE>apiprotlab'
 
- # Your modified code should look like this #
+ ## Your modified code should look like this  ##
+
 $location = 'centralus'
 `New-AzSubscriptionDeployment `
   -Location $location `
@@ -80,7 +81,7 @@ Also you can grep  Get-AzResourceGroup  to find your newly RG created:  Get-AzRe
 10. If your RG is listed you can go to the next step :)
   Extra: you may want to navigate thru Azure portal to find your Resource Group
 
-  
+
 
   # Task 2 -  Deploy DVGA - GraphQL App in an Azure Container Instance
   # Task 3 -  Do some attacks
