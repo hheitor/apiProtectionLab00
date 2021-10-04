@@ -58,7 +58,7 @@ $location = 'centralus'
   -rgName 'hhapiprotlabDELETERG' `
 
   10. Wait few seconds and your confirmation. Should look like this:
-``
+```
    Id                      : /subscriptions/XXXXXXXXXX/providers/Microsoft.Resources/deployments/hhapiprotlabrgdeploy
 DeploymentName          : hhapiprotlabrgdeploy
 Location                : centralus
@@ -74,7 +74,7 @@ Parameters              :
 
 Outputs                 :
 DeploymentDebugLogLevel :
-``
+```
 11. Also you can grep  Get-AzResourceGroup  to find your newly RG created:  Get-AzResourceGroup | grep <RGname>
 
 12. If your RG is listed you can go to the next step :)
