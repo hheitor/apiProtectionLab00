@@ -37,7 +37,7 @@ Get-AzLocation | select displayname,location
 
 9. Now modify *$location* value by the region you selected ( example: $location = centralus)
 
-
+```
 
 $location = '<Azure region>'
 New-AzSubscriptionDeployment `
@@ -46,9 +46,10 @@ New-AzSubscriptionDeployment `
   -TemplateFile $HOME/<templatefilename>.json `
   -rgLocation $location `
   -rgName '<YOUR INITIALS HERE>apiprotlab'
-
+```
 Your modified code should look like this  
 
+```
 $location = 'centralus'
 `New-AzSubscriptionDeployment `
   -Location $location `
@@ -56,6 +57,8 @@ $location = 'centralus'
   -TemplateFile $HOME/tmp_apiprot.json `
   -rgLocation $location `
   -rgName 'hhapiprotlabDELETERG' `
+```
+
 
   10. Wait few seconds and your confirmation. Should look like this:
 ```
