@@ -7,9 +7,9 @@ Welcome to API protection Lab. This time you'll work with GraphQL APIs running i
 - An azure account
 - F5 Advanced WAF BIG-IP Trial License
 
-# We GOAL: #
+#GOAL: #
 
-Protect vulnerable APIs running in Azure Container Service
+Protect vulnerable GraphQL APIs running in an Azure Container Instance
 
 # Activities: #
 
@@ -32,7 +32,7 @@ We'll be  creating Azure resources with ARM templates.
 7. Type *ls* command in the *Cloud Shell* to validate template file is there.
 8. See what regions are available and choose the closest toy you by:
 
-                    **Get-AzLocation | select displayname,location**
+                    Get-AzLocation | select displayname,location
 
 
 9. Now modify *$location* value by the region you selected ( example: $location = centralus)
@@ -83,6 +83,8 @@ DeploymentDebugLogLevel :
                    Get-AzResourceGroup | grep <RGname>
 
 12. If your RG is listed you can go to the next step :)
+
+
   Extra: you may want to navigate thru Azure portal to find your Resource Group
 
 
