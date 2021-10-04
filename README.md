@@ -27,9 +27,9 @@ We'll be  creating Azure resources with ARM templates.
 2. Open a sesssion to your Azure Portal
 3. Open the *Cloud Shell* pane by selecting on the toolbar icon directly to the right of the search textbox
 
-  https://www.google.com/search?q=f5+logo+png&rlz=1C5CHFA_enUS874US874&sxsrf=AOaemvJFvCnKxhj5yIt2Zsf2pxB99bhSsg:1633368169514&tbm=isch&source=iu&ictx=1&fir=2Gad-4Ci8Oc02M%252CN4Cb2UdhPz7VBM%252C_%253Bkpvpz0qeus-KBM%252CedKUSvQFdv1uYM%252C_%253Boj0nm6yeum-SVM%252CZ8RxtXmmo_LNJM%252C_%253BiV4fPhF6JP2i5M%252C5V5jrMxZN2B8yM%252C_%253BiMKniXqG-OesKM%252CN4Cb2UdhPz7VBM%252C_%253BlXkWFF_Oc8euZM%252CjlNmv8E1hb-tZM%252C_%253BGmyLnngcuctRJM%252Cc5ZAy8J55EkUbM%252C_%253B2xYzAcX4BswqIM%252CHdktLU61JjxZfM%252C_%253Br0CTDt64AM7jOM%252CZ8RxtXmmo_LNJM%252C_%253B3zKKurXHWeS4qM%252C2nxL0pyFOaQ1jM%252C_%253BZHFPzuzqsPB2pM%252C23f5OA_aKlIGxM%252C_%253BRd1PiKJVREPtQM%252CFrLZ8ONZUyF-OM%252C_%253B9NlGdoKxwQXwGM%252C1Iojnzyz3W4XyM%252C_&vet=1&usg=AI4_-kS9Hwu95zDKzaczWOtCfP6cbmrVwQ&sa=X&ved=2ahUKEwj1x5_MorHzAhW-kWoFHTxdCfgQ9QF6BAgOEAE#imgrc=2Gad-4Ci8Oc02M
+![Alt text]( https://www.google.com/search?q=f5+logo+png&rlz=1C5CHFA_enUS874US874&sxsrf=AOaemvJFvCnKxhj5yIt2Zsf2pxB99bhSsg:1633368169514&tbm=isch&source=iu&ictx=1&fir=2Gad-4Ci8Oc02M%252CN4Cb2UdhPz7VBM%252C_%253Bkpvpz0qeus-KBM%252CedKUSvQFdv1uYM%252C_%253Boj0nm6yeum-SVM%252CZ8RxtXmmo_LNJM%252C_%253BiV4fPhF6JP2i5M%252C5V5jrMxZN2B8yM%252C_%253BiMKniXqG-OesKM%252CN4Cb2UdhPz7VBM%252C_%253BlXkWFF_Oc8euZM%252CjlNmv8E1hb-tZM%252C_%253BGmyLnngcuctRJM%252Cc5ZAy8J55EkUbM%252C_%253B2xYzAcX4BswqIM%252CHdktLU61JjxZfM%252C_%253Br0CTDt64AM7jOM%252CZ8RxtXmmo_LNJM%252C_%253B3zKKurXHWeS4qM%252C2nxL0pyFOaQ1jM%252C_%253BZHFPzuzqsPB2pM%252C23f5OA_aKlIGxM%252C_%253BRd1PiKJVREPtQM%252CFrLZ8ONZUyF-OM%252C_%253B9NlGdoKxwQXwGM%252C1Iojnzyz3W4XyM%252C_&vet=1&usg=AI4_-kS9Hwu95zDKzaczWOtCfP6cbmrVwQ&sa=X&ved=2ahUKEwj1x5_MorHzAhW-kWoFHTxdCfgQ9QF6BAgOEAE#imgrc=2Gad-4Ci8Oc02M "title")
 
-  
+
 4. Select PowerShell (usually Bash is default)
 5. Click  *Confirm* when asked to switch from Bash to Powershell 
 6. Click the Upload button and upload : tmp_apiprot.json and wait for *upload complete message*
