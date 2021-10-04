@@ -62,7 +62,7 @@ $location = 'centralus'
    Id                      : /subscriptions/XXXXXXXXXX/providers/Microsoft.Resources/deployments/hhapiprotlabrgdeploy
 DeploymentName          : hhapiprotlabrgdeploy
 Location                : centralus
-ProvisioningState       : *Succeeded*
+ProvisioningState       : ###*Succeeded*###
 Timestamp               : xx/xx/xx xx:xx:xx PM
 Mode                    : Incremental
 TemplateLink            :
@@ -75,9 +75,9 @@ Parameters              :
 Outputs                 :
 DeploymentDebugLogLevel :
 
-10. Also you can grep  Get-AzResourceGroup  to find your newly RG created:  Get-AzResourceGroup | grep <RGname>
+11. Also you can grep  Get-AzResourceGroup  to find your newly RG created:  Get-AzResourceGroup | grep <RGname>
 
-11. If your RG is listed you can go to the next step :)
+12. If your RG is listed you can go to the next step :)
   Extra: you may want to navigate thru Azure portal to find your Resource Group
 
 
