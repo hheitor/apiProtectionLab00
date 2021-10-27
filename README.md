@@ -174,7 +174,7 @@ DeploymentDebugLogLevel :
   "diagnostics": null,
   "dnsConfig": null,
   "encryptionProperties": null,
-  "id": "/subscriptions/75f86c46-9cbc-4f6c-85ea-195e3d3c8ac0/resourceGroups/hhapiprot/providers/Microsoft.ContainerInstance/containerGroups/hhdvga222",
+  "id": "/subscriptions/<SOME STUFF>resourceGroups/<YOUR RG>/providers/Microsoft.ContainerInstance/containerGroups/<YOU CONTAINER NAME>",
   "identity": null,
   "imageRegistryCredentials": null,
   "initContainers": [],
