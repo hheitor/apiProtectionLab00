@@ -19,7 +19,7 @@ Protect vulnerable GraphQL APIs running in an Azure Container Instance with F5 A
 4. Deploy F5 Adv WAF from F5 github repo
 5. Attack again an see how F5 protects the app
 
-# Task 1 -  Create Azure resources - ONGOING(OCT04)
+# Task 1 -  Create Azure resources - (CONVERT THIS TO AZ CLI OCT 26)
 
 We'll be  creating Azure resources with ARM templates. 
 
