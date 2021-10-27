@@ -208,7 +208,7 @@ DeploymentDebugLogLevel :
   ```
   Note the Succeded string.
 
-  2. Now get the FQN of your recenlty creater container to access it thru your browser using port 5000. type the next comannds:
+  2. Now get the FQDN of your recenlty creater container to access it thru your browser using port 5000. type the next comannds:
 ```
   az container list | grep fqdn
 ```
@@ -220,7 +220,9 @@ curl http://<FQDN>:5000
 
 ```
 
-**Not sure if we can use curl as a verb but you know, sky's the limit :P
+**Not sure if we can use curl as a verb but you know, sky's the limit!
+
+
 4. Open a web browser using the same URL to see the graphQL APP
 5. You should be able to see the "Damn Vulnerable GraphQL Application" banner.
 
