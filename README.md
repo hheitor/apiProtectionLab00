@@ -90,6 +90,15 @@ DeploymentDebugLogLevel :
 
 
   # Task 2 -  Deploy DVGA - GraphQL App in an Azure Container Instance
+
+  1. Let's create a contianer that runs our vulnerable GraphQL App. Got to your Azure Cloud Shell and run the following command:
+
+```
+  az container create -g <YOU RESOURCE GROUP> --name 
+  <AZURE CONTAINER NAME DEFINED BY YOU> --image dolevf/dvga --ports 5000 --dns-name-label <A NAME TO ATTACH TO PREDFINED AZURE PUBLIC DNS NAME>  --environment-variables WEB_HOST='0.0.0.0'
+```
+
+
   # Task 3 -  Do some attacks
     try...
      what else is needed?
