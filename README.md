@@ -91,12 +91,142 @@ DeploymentDebugLogLevel :
 
   # Task 2 -  Deploy DVGA - GraphQL App in an Azure Container Instance
 
-  1. Let's create a contianer that runs our vulnerable GraphQL App. Got to your Azure Cloud Shell and run the following command:
+  1. Let's create a container that runs our vulnerable GraphQL App. Got to your Azure Cloud Shell and run the following command changening the proper values:
 
 ```
   az container create -g <YOU RESOURCE GROUP> --name 
   <AZURE CONTAINER NAME DEFINED BY YOU> --image dolevf/dvga --ports 5000 --dns-name-label <A NAME TO ATTACH TO PREDFINED AZURE PUBLIC DNS NAME>  --environment-variables WEB_HOST='0.0.0.0'
 ```
+
+ you shoudl get something similar to this:
+
+ ```
+
+ {
+  "containers": [
+    {
+      "command": null,
+      "environmentVariables": [
+        {
+          "name": "WEB_HOST",
+          "secureValue": null,
+          "value": "0.0.0.0"
+        }
+      ],
+      "image": "dolevf/dvga",
+      "instanceView": {
+        "currentState": {
+          "detailStatus": "",
+          "exitCode": null,
+          "finishTime": null,
+          "startTime": "xxxxxx0",
+          "state": "Running"
+        },
+        "events": [
+          {
+            "count": 1,
+            "firstTimestamp": "xxxxx",
+            "lastTimestamp": "xxxxxx",
+            "message": "Successfully pulled image \"dolevf/dvga@<BIG STRING HERE , YOU KNOW MY MAN>4\"",
+            "name": "Pulled",
+            "type": "Normal"
+          },
+          {
+            "count": 1,
+            "firstTimestamp": "xxxxx",
+            "lastTimestamp": "xxxxxx",
+            "message": "pulling image \"dolevf/dvga@<A BIG STRING HERE>\"",
+            "name": "Pulling",
+            "type": "Normal"
+          },
+          {
+            "count": 1,
+            "firstTimestamp": "xxxxxxx",
+            "lastTimestamp": "xxxxx",
+            "message": "Started container",
+            "name": "Started",
+            "type": "Normal"
+          }
+        ],
+        "previousState": null,
+        "restartCount": 0
+      },
+      "livenessProbe": null,
+      "name": "<YOU CONTAINER NAME>",
+      "ports": [
+        {
+          "port": 5000,
+          "protocol": "TCP"
+        }
+      ],
+      "readinessProbe": null,
+      "resources": {
+        "limits": null,
+        "requests": {
+          "cpu": 1.0,
+          "gpu": null,
+          "memoryInGb": 1.5
+        }
+      },
+      "volumeMounts": null
+    }
+  ],
+  "diagnostics": null,
+  "dnsConfig": null,
+  "encryptionProperties": null,
+  "id": "/subscriptions/75f86c46-9cbc-4f6c-85ea-195e3d3c8ac0/resourceGroups/hhapiprot/providers/Microsoft.ContainerInstance/containerGroups/hhdvga222",
+  "identity": null,
+  "imageRegistryCredentials": null,
+  "initContainers": [],
+  "instanceView": {
+    "events": [],
+    "state": "Running"
+  },
+  "ipAddress": {
+    "dnsNameLabel": "<DNS NAME FOR YOU CONTAINER>",
+    "fqdn": "<DNS NAME FOR YOU CONTAINER>.hhcontainerhoy.eastus.azurecontainer.io",
+    "ip": "<PUBLIC IP ASSIGEND BY AZURE>",
+    "ports": [
+      {
+        "port": 5000,
+        "protocol": "TCP"
+      }
+    ],
+    "type": "Public"
+  },
+  "location": "eastus",
+  "name": "<YOUR CONTAINER NAME>",
+  "osType": "Linux",
+  "provisioningState": "Succeeded",
+  "resourceGroup": "<YOUR RG>",
+  "restartPolicy": "Always",
+  "sku": "Standard",
+  "subnetIds": null,
+  "tags": {},
+  "type": "Microsoft.ContainerInstance/containerGroups",
+  "volumes": null
+  ```
+  Note the Succeded string.
+
+  2. Now get the FQN of your recenlty creater container to access it thru your browser using port 5000. type the next comannds:
+```
+  az container list | grep fqdn
+```
+
+3. Take copy that FQDN and add schem http and port 5000 to curl it:
+
+```
+curl http://<FQDN>:5000
+
+```
+
+**Not sure if we can use curl as a verb but you know, sky's the limit :P
+4. Open a web browser using the same URL to see the graphQL APP
+5. You should be able to see the "Damn Vulnerable GraphQL Application" banner.
+
+In the next section we;ll explore some attacks
+
+
 
 
   # Task 3 -  Do some attacks
