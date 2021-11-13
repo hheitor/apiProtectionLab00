@@ -105,7 +105,7 @@ It is recommended to use parameter "--public-ip-sku Standard" to create new VM w
 **note the RSA message. your ssh files are store on your Cloudshell portal home directory for later use.
 
 ```
-Take note of the Public IP Address
+## Take note of the Public IP Address
 
 2. Run commands inside the VM to install GraphQL application on port 5000:
 
@@ -238,15 +238,17 @@ You'll receive this:
 
 Also use a browser with the same URL and navigate freely on the interface :)
 
+## timestamp 2021111300
+
 5. Now you can start attacking this app :)
 
 
   # Task 3 -  Do some attacks
 
-**gotta check this**
 
 1. Get the IP address of your recently created instance and change the hostname of the next curl request:
 
+```
 
 curl -g \
 -X POST \
@@ -254,6 +256,7 @@ curl -g \
 -d '{"query":"mutation {importPaste(host:\"localhost\", port:80, path:\"/ ; netstat -ar\", scheme:\"http\"){result}}"}' \
 http://<YOUR CONTAINER IP>/graphql
 
+```
 You should get someting like this:
 
 ```
