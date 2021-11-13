@@ -250,6 +250,7 @@ Also use a browser with the same URL and navigate freely on the interface :)
 
 ```
 
+
 curl -g \
 -X POST \
 -H "Content-Type: application/json" \
