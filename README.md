@@ -134,12 +134,19 @@ ssh -i id_rsa azureuser@<YOUR VM PUBLIC IP>
 
 ```
  
+5. Docker ps command should show container runningn on port 5000:
+
+```
+
+CONTAINER ID   IMAGE         COMMAND            CREATED      STATUS      PORTS                                       NAMES
+f556d183fb23   dolevf/dvga   "python3 app.py"   5 days ago   Up 5 days   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   elated_antonelli
+
+```
 
 
 
 
-
-4. Get back to Azure Cloud shell and Open VM ports for graphQL application (running on port tcp 5000):
+5. Get back to Azure Cloud shell (exit ssh connection) and Open VM ports for graphQL application (running on port tcp 5000):
 
 ```
 az vm open-port -g $rg -n $vm --port 5000
@@ -147,7 +154,7 @@ az vm open-port -g $rg -n $vm --port 5000
 
 ```
 
-This one's a bit large:
+Output's a bit large:
 
 ```
 
@@ -209,7 +216,7 @@ az vm open-port -g $rg -n $vm --port 5000
 
   ** command modifies Neto=work Security Group to allow inbound port 5000
 
-4. Test application by :
+6. Test application by :
 
 ```
 
