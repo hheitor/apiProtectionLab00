@@ -107,7 +107,14 @@ It is recommended to use parameter "--public-ip-sku Standard" to create new VM w
 ```
 Take note of the Public IP Address
 
-2. Connect to your VM using your ssh key file located at $HOME/.ssh
+2. Open port 22
+
+```
+az vm open-port -g $rg -n $vm --port 22
+
+
+```
+3. Connect to your VM using your ssh key file located at $HOME/.ssh
 
 ```
 
@@ -116,7 +123,7 @@ ssh -i id_rsa azureuser@<YOUR VM PUBLIC IP>
 
 
 ```
-3. Once inside proceed to install graphQL app:
+4. Once inside proceed to install graphQL app:
 
 ```
  sudo apt-get update 
@@ -127,51 +134,12 @@ ssh -i id_rsa azureuser@<YOUR VM PUBLIC IP>
 
 ```
  
-NOw get the app form docker hub
-
-```
-{
-  "value": [
-    {
-      "code": "ProvisioningState/succeeded",
-      "displayStatus": "Provisioning succeeded",
-      "level": "Info",
-      "message": "Enable succeeded: \n[stdout]\nUsing default tag: latest\nlatest: Pulling from dolevf/dvga\nDigest: sha256:7cbad19a09c006e29ceaf5a5389233110bc4c4f50be03432acabc5317ca14914\nStatus: Image is up to date for dolevf/dvga:latest\ndocker.io/dolevf/dvga:latest\n\n[stderr]\n",
-      "time": null
-    }
-  ]
-}
-
-``
-
-RUN the app o port 5000
-
-```
-just in case
-*** az vm run-command invoke -g $rg -n $vm  --command-id RemoveRunCommandLinuxExtension**
-
-```
-
-
-{
-  "value": [
-    {
-      "code": "ProvisioningState/succeeded",
-      "displayStatus": "Provisioning succeeded",
-      "level": "Info",
-      "message": "Enable succeeded: \n[stdout]\nHit:1 http://azure.archive.ubuntu.com/ubuntu bionic InRelease\nGet:2 http://azure.archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]\nGet:3 http://azure.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]\nGet:4 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]\nGet:5 http://azure.archive.ubuntu.com/ubuntu bionic/universe amd64 Packages [8570 kB]\nGet:6 http://azure.archive.ubuntu.com/ubuntu bionic/universe Translation-en [4941 kB]\nGet:7 http://azure.archive.ubuntu.com/ubuntu bionic/multiverse amd64 Packages [151 kB]\nGet:8 http://azure.archive.ubuntu.com/ubuntu bionic/multiverse Translation-en [108 kB]\nGet:9 http://azure.archive.ubuntu.com/ubuntu bionic-updates/main amd64 Packages [2303 kB]\nGet:10 http://azure.archive.ubuntu.com/ubuntu bionic-updates/main Translation-en [445 kB]\nGet:11 http://azure.archive.ubuntu.com/ubuntu bionic-updates/restricted amd64 Packages [540 kB]\nGet:12 http://azure.archive.ubuntu.com/ubuntu bionic-updates/restricted Translation-en [73.6 kB]\nGet:13 http://azure.archive.ubuntu.com/ubuntu bionic-updates/universe amd64 Packages [1764 kB]\nGet:14 http://azure.archive.ubuntu.com/ubuntu bionic-updates/universe Translation-en [380 kB]\nGet:15 http://azure.archive.ubuntu.com/ubuntu bionic-updates/multiverse amd64 Packages [27.3 kB]\nGet:16 http://azure.archive.ubuntu.com/ubuntu bionic-updates/multiverse Translation-en [6808 B]\nGet:17 http://azure.archive.ubuntu.com/ubuntu bionic-backports/main amd64 Packages [10.0 kB]\nGet:18 http://azure.archive.ubuntu.com/ubuntu bionic-backports/main Translation-en [4764 B]\nGet:19 http://azure.archive.ubuntu.com/ubuntu bionic-backports/universe amd64 Packages [10.3 kB]\nGet:20 http://azure.archive.ubuntu.com/ubuntu bionic-backports/universe Translation-en [4588 B]\nGet:21 http://security.ubuntu.com/ubuntu bionic-security/main amd64 Packages [1958 kB]\nGet:22 http://security.ubuntu.com/ubuntu bionic-security/main Translation-en [352 kB]\nGet:23 http://security.ubuntu.com/ubuntu bionic-security/restricted amd64 Packages [516 kB]\nGet:24 http://security.ubuntu.com/ubuntu bionic-security/restricted Translation-en [69.9 kB]\nGet:25 http://security.ubuntu.com/ubuntu bionic-security/universe amd64 Packages [1148 kB]\nGet:26 http://security.ubuntu.com/ubuntu bionic-security/universe Translation-en [263 kB]\nGet:27 http://security.ubuntu.com/ubuntu bionic-security/multiverse amd64 Packages [20.9 kB]\nGet:28 http://security.ubuntu.com/ubuntu bionic-security/multiverse Translation-en [4732 B]\nFetched 23.9 MB in 5s (4524 kB/s)\nReading package lists...\n\n[stderr]\n/var/lib/waagent/run-command/download/0/script.sh: 1: /var/lib/waagent/run-command/download/0/script.sh: docker: not found\n",
-      "time": null
-    }
-  ]
-}
-
-
-** VALIDATE THIS WITH FULL COMMAND
-```
 
 
 
-3. Open VM ports for graphQL application (running on port tcp 5000):
+
+
+4. Get back to Azure Cloud shell and Open VM ports for graphQL application (running on port tcp 5000):
 
 ```
 az vm open-port -g $rg -n $vm --port 5000
