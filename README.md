@@ -59,7 +59,7 @@ You'll get somehitng like this:
 ```
 
 
-  "id": "/subscriptions/<Some number>/resourceGroups/hhRGlab",
+  "id": "/subscriptions/<SOME NUMBER>/resourceGroups/hhRGlab",
   "location": "centralus",
   "managedBy": null,
   "name": "hhRGlab",
@@ -75,11 +75,11 @@ You'll get somehitng like this:
 
 # Task 2 -  Create GraphQL application on a linux VM
 
-1. Create  a  linux virtual machine (VM) with the following command:
+1. Create  a  linux virtual machine (VM) with the following command (in the Tag value put your initials after = symbol) :
 
 ```
 
-az vm create -g $rg -n $vm --image "UbuntuLTS" --admin-username "azureuser" --generate-ssh-keys
+az vm create -g $rg -n $vm --image "UbuntuLTS" --admin-username "azureuser" --generate-ssh-keys --tags owner[=<YOUR INITIALS>]
 
 ```
 
@@ -105,19 +105,50 @@ It is recommended to use parameter "--public-ip-sku Standard" to create new VM w
 **note the RSA message. your ssh files are store on your Cloudshell portal home directory for later use.
 
 ```
-## Take note of the Public IP Address
+Take note of the Public IP Address
 
-2. Run commands inside the VM to install GraphQL application on port 5000:
-
-```
-
-az vm run-command invoke -g $rg -n $vm --command-id RunShellScript --scripts "apt-get update &&  apt-get install -y docker &&  docker pull dolevf/dvga && docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga"
-
-
+2. Connect to your VM using your ssh key file located at $HOME/.ssh
 
 ```
 
-check if succeded (IT MAY TAKE SOME TIME):
+ssh -i id_rsa azureuser@<YOUR VM PUBLIC IP>
+
+
+
+```
+3. Once inside proceed to install graphQL app:
+
+```
+ sudo apt-get update 
+ sudo  apt-get install -y docker.io 
+ sudo  docker pull dolevf/dvga 
+ sudo docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga 
+ sudo docker ps
+
+```
+ 
+NOw get the app form docker hub
+
+```
+{
+  "value": [
+    {
+      "code": "ProvisioningState/succeeded",
+      "displayStatus": "Provisioning succeeded",
+      "level": "Info",
+      "message": "Enable succeeded: \n[stdout]\nUsing default tag: latest\nlatest: Pulling from dolevf/dvga\nDigest: sha256:7cbad19a09c006e29ceaf5a5389233110bc4c4f50be03432acabc5317ca14914\nStatus: Image is up to date for dolevf/dvga:latest\ndocker.io/dolevf/dvga:latest\n\n[stderr]\n",
+      "time": null
+    }
+  ]
+}
+
+``
+
+RUN the app o port 5000
+
+```
+just in case
+*** az vm run-command invoke -g $rg -n $vm  --command-id RemoveRunCommandLinuxExtension**
 
 ```
 
@@ -255,7 +286,7 @@ curl -g \
 -X POST \
 -H "Content-Type: application/json" \
 -d '{"query":"mutation {importPaste(host:\"localhost\", port:80, path:\"/ ; netstat -ar\", scheme:\"http\"){result}}"}' \
-http://<YOUR CONTAINER IP>/graphql
+http://<VM Public IP>/graphql
 
 ```
 You should get someting like this:
