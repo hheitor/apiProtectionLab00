@@ -241,10 +241,14 @@ You'll receive this:
 
       
 ```
+Please note you tested directly using a GET to http://<YOUR VM PUBLIC IP> 
+
+TRIVIA: what methods are allowes on graphQL? and How many endpoints are used for graphQL operations?
+
 
 Also use a browser with the same URL and navigate freely on the interface :)
 
-## timestamp 2021111300
+## timestamp 20201112600
 
 5. Now you can start attacking this app :)
 
