@@ -362,7 +362,7 @@ az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep
 
 Output shall be similar to this:
 
-
+```
 {
   "fqdns": "",
   "id": "/subscriptions/<BIG NUMBA HERE>/resourceGroups/hhRGlab/providers/Microsoft.Compute/virtualMachines/f51waf01",
@@ -376,7 +376,8 @@ Output shall be similar to this:
 }
 ```
 
- Please note VM private & public IP 
+Please note VM private & public IP 
+
 4. Test your WAF using predefined credentials:
 
 ```
@@ -398,5 +399,6 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)# 
 
 ```
+
 #### timestamp 2021112903
 
