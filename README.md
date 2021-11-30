@@ -37,7 +37,7 @@ See Name column and select the location  that makes more sense to  you. In this 
 ```
 
 location=entralus
-rg=hhRGLab
+rg=hhRGlab
 vm=graphqlVM
 
 
@@ -107,8 +107,9 @@ It is recommended to use parameter "--public-ip-sku Standard" to create new VM w
 ```
 Take note of the Public IP Address
 
+quitar
 2. Open port 22
-
+quitar
 ```
 az vm open-port -g $rg -n $vm --port 22
 
@@ -146,7 +147,7 @@ f556d183fb23   dolevf/dvga   "python3 app.py"   5 days ago   Up 5 days   0.0.0.0
 
 
 
-5. Get back to Azure Cloud shell (exit ssh connection) and Open VM ports for graphQL application (running on port tcp 5000):
+6. Get back to Azure Cloud shell (exit ssh connection) and Open VM ports for graphQL application (running on port tcp 5000):
 
 ```
 az vm open-port -g $rg -n $vm --port 5000
@@ -216,7 +217,7 @@ az vm open-port -g $rg -n $vm --port 5000
 
   ** command modifies Network Security Group to allow inbound port 5000
 
-6. Test application by :
+7. Test application by :
 
 ```
 
@@ -250,9 +251,9 @@ TRIVIA: what methods are allowed   on graphQL? and How many endpoints are used f
 Also use a browser with the same URL and navigate freely on the interface :)
 - Naviagate Private Pastes, Import paste and other left-located tabs
 
-## timestamp 2021112900
 
-5. Now you can start attacking this app :)
+
+8. Now you can start attacking this app :)
 
 
   # Task 3 -  Do some attacks
@@ -279,10 +280,10 @@ You should get someting like this:
 "data":{"importPaste":{"result":"Kernel IP routing table\nDestination     Gateway         Genmask         Flags   MSS Window  irtt Iface\ndefault         X.X.X.X     0.0.0.0         UG        0 0          0 NIC\nX.X.X.X     *               255.255.255.0   U         0 0          0 NIC\n"}}}
 ```
 
-As you can see, your GraphQL endpoint works and also allows anyone to know internal networking. Not cool.
+As you can see, your GraphQL endpoint works and also allows anyone to know internal networking. Nice point to start target recoinossance. Not cool.
 
 #### Deep Recursion - DoS
-2. 
+2.  ;;;;VALIDATE IMPACT OF THIS ONE;;;
 
 
 ```
@@ -293,20 +294,109 @@ curl -g \
 -d '{"query":"query {pastes {owner {paste {edges {node {owner {paste {edges {node {owner {paste {edges {node {owner {id}}}}}}}}}}}}}}}"}' \
 http://<VM Public IP>:5000/graphql
 
-  
+```
+Note the time it takes to answer this single request. This may lead to DoS increasing the number of requests.
+the next request does a similar effect but tajes more time
+
+#### Resource Intensive Query Attack
+ 3.  This query will be more computationally expensive on resourcethan the latter, consuming more time and causing impact on infrastructure.
   
 
 ```
+ time curl -g \
+ -X POST 
+  -H "Content-Type: application/json" 
+   -d '{"query":"query {\n  systemUpdate\n}","variables":[]}' http://23.101.113.30:5000/graphql
+  
 
-Note the time it takes to answer this single request. This may lead to DoS increasing the number of requests.
+```
+It took a little time huh?
+
+```
+
+{"data":{"systemUpdate":"no updates available"}}
+real    0m50.288s
+user    0m0.011s
+sys     0m0.000s
+
+
+```
+There are lots of attacks you can do on graphQL endpoints that can compromise underlying infrastructure so yes, you need to protect them as well with WAF that understands this arcitectural style.
+
+
+
   # Task 4 - Deploy F5 Adv WAF to protect GraphQL endpoint
 
-  1. create an instance of Advanced WAF.
+1. Create an PAYG instance of 25Mb Advanced WAF by fisrt getting its URN:
+
+ ```
+az vm image list --publisher f5-networks --all 
+
+```
+  I know, we don't use the 'networks' thing anymore but we cool :)
+  
+  As you can see a lot of output is shown but paying a bit of attention you'll see URN also correspond to BIG-IP version so, look for the URN that contains awf + 25mbps+hourly + 16.1
+
+  Version 16.x includes GraphQL filters to better protect this traffic.
+
+2. Filter ouput using this command:
+
+```
+az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep awf
+
+```
+ your interes URN shall be:
+
+ ```
+ "urn": "f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000"
+
+```
+
+3. create your f5 WAF:
 
   ```
 
-  az vm create -g $rg -n $vm --image "f5-big-ip-advanced-waf" --admin-username "azureuser" --generate-ssh-keys --tags owner[=<YOUR INITIALS>]
-
+  az vm create -n f51waf01 -g $rg --image f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000 --admin-username azureuser --admin-password fS0n3WAF12345  
 
 ```
-  # Task 5 - Try attacks again and see f5 event log
+
+Output shall be similar to this:
+
+
+{
+  "fqdns": "",
+  "id": "/subscriptions/<BIG NUMBA HERE>/resourceGroups/hhRGlab/providers/Microsoft.Compute/virtualMachines/f51waf01",
+  "location": "centralus",
+  "macAddress": "<A MAC>",
+  "powerState": "VM running",
+  "privateIpAddress": "10.0.0.7",
+  "publicIpAddress": "<PUBLIC IP>",
+  "resourceGroup": "hhRGlab",
+  "zones": ""
+}
+```
+
+ Please note VM private & public IP 
+4. Test your WAF using predefined credentials:
+
+```
+
+ssh -l azureuser <YOUR F5 WAF IP> 
+
+```
+
+A prompt with your user and Active string is a good signal that everything went ok:
+
+```
+
+The authenticity of host '<PUBLIC IP>' can't be established.
+ECDSA key fingerprint is SHA256:<A FINGERPRINT YOU ALWAYS IGNORE>.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '<PUBLIC IP>' (ECDSA) to the list of known hosts.
+Password: 
+azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)# 
+azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)# 
+
+```
+#### timestamp 2021112903
+
