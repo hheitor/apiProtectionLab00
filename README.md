@@ -13,10 +13,10 @@ Protect vulnerable GraphQL endpoint running in an Azure VM with F5 Advanced WAF
 
 # Activities: #
 
-1. Create Azure infrastructure using Azure loudshell
+1. Create Azure infrastructure using Azure Cloudshell
 2. Deploy GraphQL App - DVGA
 3. Attack it
-4. Deploy F5 Adv WAF from F5 github repo
+4. Deploy F5 Adv WAF from Azure Cloudshell
 5. Attack again an see how F5 protects the app
 
 # Task 1 -  Create Azure resources using Azure CLI
@@ -44,7 +44,8 @@ vm=graphqlVM
 ```
 
 ** Be careful with spacing
-** vm var is for later use
+
+*** vm var is for later use
 
 5. Create a resource group:
 
@@ -105,17 +106,10 @@ It is recommended to use parameter "--public-ip-sku Standard" to create new VM w
 **note the RSA message. your ssh files are store on your Cloudshell portal home directory for later use.
 
 ```
-Take note of the Public IP Address
+Take note of the Public IP Address & Private IP Address for later USE
 
-quitar
-2. Open port 22
-quitar
-```
-az vm open-port -g $rg -n $vm --port 22
-
-
-```
-3. Connect to your VM using your ssh key file located at $HOME/.ssh
+ 
+2. Connect to your VM using your ssh key file located at $HOME/.ssh
 
 ```
 
@@ -124,18 +118,18 @@ ssh -i id_rsa azureuser@<YOUR VM PUBLIC IP>
 
 
 ```
-4. Once inside proceed to install graphQL app:
+3. Once inside proceed to install graphQL app:
 
 ```
  sudo apt-get update 
  sudo  apt-get install -y docker.io 
  sudo  docker pull dolevf/dvga 
- sudo docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga 
+ sudo docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga -d
  sudo docker ps
 
 ```
  
-5. Docker ps command should show container runningn on port 5000:
+4. Docker ps command should show container runningn on port 5000:
 
 ```
 
@@ -147,7 +141,7 @@ f556d183fb23   dolevf/dvga   "python3 app.py"   5 days ago   Up 5 days   0.0.0.0
 
 
 
-6. Get back to Azure Cloud shell (exit ssh connection) and Open VM ports for graphQL application (running on port tcp 5000):
+5. Get back to Azure Cloud shell (exit ssh connection) and Open VM ports for graphQL application (running on port tcp 5000):
 
 ```
 az vm open-port -g $rg -n $vm --port 5000
@@ -217,7 +211,7 @@ az vm open-port -g $rg -n $vm --port 5000
 
   ** command modifies Network Security Group to allow inbound port 5000
 
-7. Test application by :
+6. Test application by :
 
 ```
 
@@ -249,11 +243,11 @@ TRIVIA: what methods are allowed   on graphQL? and How many endpoints are used f
 ```
 
 Also use a browser with the same URL and navigate freely on the interface :)
-- Naviagate Private Pastes, Import paste and other left-located tabs
+- Navigate Private Pastes, Import paste and other left-located tabs
 
 
 
-8. Now you can start attacking this app :)
+7. Now you can start attacking this app :)
 
 
   # Task 3 -  Do some attacks
@@ -345,7 +339,7 @@ az vm image list --publisher f5-networks --all
 az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep awf
 
 ```
- your interes URN shall be:
+ your URN of interese shall be:
 
  ```
  "urn": "f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000"
@@ -400,5 +394,39 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 
 ```
 
-#### timestamp 2021112903
+#### timestamp 202111290
+```
 
+4. Validate f5 networking. At the TMSH prompt execute:
+
+```
+
+list /net self
+
+```
+
+you'll get your F5 WAF local IP:
+
+
+```
+
+net self self_1nic {
+    address 10.0.0.7/24
+    allow-service {
+        default
+    }
+    traffic-group traffic-group-local-only
+    vlan internal
+}
+azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)# 
+
+
+```
+
+It is on the same net of your vulnerable GraphQL Machine (check).
+
+#### timestamp 2021121400
+
+5. Configure your WAF to protecto your GraphQL endpoint
+
+//// AS3 configiration: VS + GraphQL Ready policy ...upload as3 declartion to github////
