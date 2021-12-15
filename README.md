@@ -1,4 +1,4 @@
-# apiProtectionLabDRAFT
+# apiProtectionLabAlpha
 # Protecting APIs in Azure  with F5#
 
 Welcome to API protection Lab. This time you'll work with GraphQL APIs running in an ACI (Azure Container Instance)
@@ -397,7 +397,7 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 #### timestamp 202111290
 ```
 
-4. Validate f5 networking. At the TMSH prompt execute:
+5. Validate f5 networking. At the TMSH prompt execute:
 
 ```
 
@@ -423,16 +423,195 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 
 ```
 
-It is on the same net of your vulnerable GraphQL Machine (check).
+It is on the same net of your vulnerable GraphQL Machine. We will use that IP as pool member in our AS3 declaration
 
 #### timestamp 2021121400
 
-5. Configure your WAF to protect your GraphQL endpoint
+5. Configure your F5 to publish your GraphQL endpoint using AS3. so let's go and install the RPM file ont the WAF.
+On your cloudshell console execute:
+
+```
+
+wget https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.33.0/f5-appsvcs-3.33.0-4.noarch.rpm
+```
+
+You'll get this as a result:
+
+```
+wget https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.33.0/f5-appsvcs-3.33.0-4.noarch.rpm
+--2021-12-15 04:44:48--  https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.33.0/f5-appsvcs-3.33.0-4.noarch.rpm
+Resolving github.com (github.com)... 140.82.113.4
+Connecting to github.com (github.com)|140.82.113.4|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://objects.githubusercontent.com/github-production-release-asset-2e65be/130101810/977b7d13-1ad6-49b7-917b-fcf412594ecf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20211215%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211215T044448Z&X-Amz-Expires=300&X-Amz-Signature=60f9744318a63dd48bbeded4d06870a1116f68fd479d60d655e5104c88bac717&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=130101810&response-content-disposition=attachment%3B%20filename%3Df5-appsvcs-3.33.0-4.noarch.rpm&response-content-type=application%2Foctet-stream [following]
+--2021-12-15 04:44:48--  https://objects.githubusercontent.com/github-production-release-asset-2e65be/130101810/977b7d13-1ad6-49b7-917b-fcf412594ecf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20211215%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211215T044448Z&X-Amz-Expires=300&X-Amz-Signature=60f9744318a63dd48bbeded4d06870a1116f68fd479d60d655e5104c88bac717&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=130101810&response-content-disposition=attachment%3B%20filename%3Df5-appsvcs-3.33.0-4.noarch.rpm&response-content-type=application%2Foctet-stream
+Resolving objects.githubusercontent.com (objects.githubusercontent.com)... 185.199.111.133, 185.199.108.133, 185.199.109.133, ...
+Connecting to objects.githubusercontent.com (objects.githubusercontent.com)|185.199.111.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 21353286 (20M) [application/octet-stream]
+Saving to: ‘f5-appsvcs-3.33.0-4.noarch.rpm’
+
+f5-appsvcs-3.33.0-4.noarch.rpm      100%[=================================================================>]  20.36M  21.2MB/s    in 1.0s
+
+2021-12-15 04:44:50 (21.2 MB/s) - ‘f5-appsvcs-3.33.0-4.noarch.rpm’ saved [21353286/21353286]
+
+
+```
+
+4. Do a pwd to know your current directoy
+
+```
+
+h_heredia@Azure:~$ pwd
+/home/h_heredia
+h_heredia@Azure:~$
+
+```
+
+6. We'l take into account this path to complete the next command to upload & install AS3 onto the bigip
 
 
 
-//// AS3 configiration: VS + GraphQL Ready policy ...upload as3 declartion to github////
 
-1. Reviewi aviable VS IP? if tis one nic then will use smae ip address.
-2. make sure port 5000 is open to F5
-3. configure above setting by AS3 declaraion over CURL
+```
+
+  ./install-rpm.sh <YOU F5 WAF PUBLIC IP> azureuser:fS0n3WAF12345 /home/h_heredia
+
+```
+finishing...
+
+
+```
+./install-rpm.sh 40.86.90.125 azureuser:fS0n3WAF12345 /home/h_heredia/f5-appsvcs-3.33.0-4.noarch.rpm
+Uploading RPM to https://<F5 WAF PUBLIC IP>:8443/mgmt/shared/file-transfer/uploads/f5-appsvcs-3.33.0-4.noarch.rpm
+Installing f5-appsvcs-3.33.0-4.noarch.rpm on <F5 WAF PUBLIC IP>
+Waiting for /info endpoint to be available
+Installed f5-appsvcs-3.33.0-4.noarch.rpm on <F5 WAF PUBLIC IP>
+
+```
+
+AS3 is installed, now we can configure f5 declaratively :)
+
+7. Before we proceed with config let's get a token first:
+
+```
+a curl -k -X POST https://<YOU F5 WAF PUBLIC IP>:8443/mgmt/shared/authn/login -H "Content-type: application/json"  -H "Host:40.86.90.125" -d '{
+    "username":"azureuser",
+    "password":"fS0n3WAF12345",
+    "loginProviderName":"tmos"
+}'
+
+``` 
+From the output you'll see a token value (after 'token:'):
+
+```
+{"username":"azureuser","loginReference":{"link":"https://localhost/mgmt/cm/system/authn/providers/tmos/1f44a60e-11a7-3c51-a49f-82983026b41b/login"},"loginProviderName":"tmos","token":{"token":"QYRBXDSCPZW2LGLGEKIB3E23L5","name":"QYRBXDSCPZW2LGLGEKIB3E23L5","userName":"azureuser","authProviderName":"tmos","user":{"link":"https://localhost/mgmt/shared/authz/users/azureuser"},"timeout":1200,"startTime":"2021-12-14T22:22:11.851-0800","address":"187.161.181.202","partition":"[All]","generation":1,"lastUpdateMicros":1639549331850940,"expirationMicros":1639550531851000,"kind":"shared:authz:tokens:authtokenitemstate","selfLink":"https://localhost/mgmt/shared/authz/tokens/QYRBXDSCPZW2LGLGEKIB3E23L5"},"generation":0,"lastUpdateMicros":0}heredia@FLD-ML-00054376:~$ 
+
+
+```
+
+Get it and use it for the next request as value of X-F5-Auth-Token header in order to valide AS3 installation & token validity: 
+
+```
+
+ curl -k https://40.86.90.125:8443/mgmt/shared/appsvcs/info  -H "Content-type: application/json" -H "Host:40.86.90.125" -H "X-F5-Auth-Token: QYRBXDSCPZW2LGLGEKIB3E23L5"
+ 
+```
+
+You'll get your confirmation back as follows:
+
+```
+
+{"version":"3.33.0","release":"4","schemaCurrent":"3.33.0","schemaMinimum":"3.0.0"}
+
+```
+
+GREAT!!! Lets configure our WAF in a declarative way.
+
+8. First we will send and AS3 declaration to publish thru f5 the graphQL app:
+
+
+
+
+```
+
+ curl -X POST -k https://40.86.90.125:8443/mgmt/shared/appsvcs/declare  -H "Content-type: application/json" -H "Host:40.86.90.125" -H "X-F5-Auth-Token: 2EJQ52UM5UNMSG3QAU7DFTNJGJ" \
+  -d '{
+     "class": "AS3",
+     "action": "deploy",
+     "persist": true,
+     "declaration": {
+         "class": "ADC",
+         "schemaVersion": "3.0.0",
+         "id": "2021121400",
+         "label": "vs4graph",
+         "remark": "VS to protect GraphQL endpoint",
+         "WAF_01": {
+             "class": "Tenant",
+             "defaultRouteDomain": 0,
+             "Application_1": {
+                 "class": "Application",
+                 "template": "http",
+             "serviceMain": {
+                 "class": "Service_HTTP",
+                 "virtualAddresses": [
+                     "10.0.0.7"
+                 ],
+                 "pool": "api_pool"
+                 },
+                 "api_pool": {
+                     "class": "Pool",
+                     "monitors": [
+                         "http"
+                     ],
+                     "members": [
+                         {
+                             "servicePort": 5000,
+                             "serverAddresses": [
+                                 "10.0.0.5"
+                             ]
+                         }
+                     ]
+                 }
+             }
+         }
+     }
+ }' 
+  
+
+
+  ```
+ 6. F5 WAF will confirm back:
+
+
+ ```
+
+{"results":[{"code":200,"message":"success","lineCount":24,"host":"localhost","tenant":"WAF_01","runTime":3650}],"declaration":{"class":"ADC","schemaVersion":"3.0.0","id":"2021121400","label":"vs4graph","remark":"VS to protect GraphQL endpoint","WAF_01":{"class":"Tenant","defaultRouteDomain":0,"Application_1":{"class":"Application","template":"http","serviceMain":{"class":"Service_HTTP","virtualAddresses":["10.0.0.7"],"pool":"api_pool"},"api_pool":{"class":"Pool","monitors":["http"],"members":[{"servicePort":5000,"serverAddresses":["10.0.0.5"]}]}}},"updateMode":"selective","controls":{"archiveTimestamp":"2021-12-15T05:44:21.817Z"}}}h_heredia@Azure:~$
+
+
+ ```
+
+
+
+
+
+ 7. Try accessing your API by curling to it pointing to F5 WAF public ip to port 80:
+
+
+ ```
+curl http://<YOU F5 WAF PUBLIC IP> | grep graphql
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  7955  100  7955    0     0  40794      0 --:--:-- --:--:-- --:--:-- 40794
+          <a href="https://labs.bishopfox.com/tech-blog/design-considerations-for-secure-graphql-apis" target="_blank">BishopFox Labs - Design Considerations</a>
+          <a href="https://leapgraph.com/graphql-api-security" target="_blank">Leap Graph - How to secure GraphQL APIs</a>
+
+
+ ```
+
+ We grep so output it is reduced :)
+
+
+
+
+ 
