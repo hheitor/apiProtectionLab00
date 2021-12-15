@@ -1,0 +1,83 @@
+{
+   "policy" : {
+      "applicationLanguage" : "utf-8",
+      "caseInsensitive" : false,
+      "description" : "WAF Policy with GraphQL Profile",
+      "enablePassiveMode" : false,
+      "enforcementMode" : "blocking",
+      "signature-settings": {
+			"signatureStaging": false
+	   },
+      "filetypes" : [
+         {
+            "allowed" : true,
+            "checkPostDataLength" : true,
+            "checkQueryStringLength" : true,
+            "checkRequestLength" : true,
+            "checkUrlLength" : true,
+            "name" : "php",
+            "performStaging" : true,
+            "postDataLength" : 1000,
+            "queryStringLength" : 1000,
+            "requestLength" : 5000,
+            "responseCheck" : false,
+            "type" : "explicit",
+            "urlLength" : 100
+         }
+      ],
+      "fullPath" : "/Common/waf_policy_withgraphql",
+      "graphql-profiles" : [
+         {
+            "attackSignaturesCheck" : true,
+            "defenseAttributes" : {
+               "allowIntrospectionQueries" : true,
+               "maximumBatchedQueries" : 10,
+               "maximumStructureDepth" : 10,
+               "maximumTotalLength" : 100000,
+               "maximumValueLength" : 10000,
+               "tolerateParsingWarnings" : true
+            },
+            "description" : "",
+            "metacharElementCheck" : false,
+            "name" : "graphql_profile"
+         }
+      ],
+      "name" : "waf_policy_withgraphql",
+      "protocolIndependent" : false,
+      "softwareVersion" : "16.1.0",
+      "template" : {
+         "name" : "POLICY_TEMPLATE_GRAPHQL"
+      },
+      "type" : "security",
+      "urls" : [
+         {
+            "attackSignaturesCheck" : true,
+            "clickjackingProtection" : false,
+            "description" : "",
+            "disallowFileUploadOfExecutables" : false,
+            "html5CrossOriginRequestsEnforcement" : {
+               "enforcementMode" : "disabled"
+            },
+            "isAllowed" : true,
+            "mandatoryBody" : false,
+            "method" : "*",
+            "methodsOverrideOnUrlCheck" : false,
+            "name" : "/graphql",
+            "performStaging" : false,
+            "protocol" : "https",
+            "type" : "explicit",
+            "urlContentProfiles" : [
+               {
+                  "contentProfile" : {
+                     "name" : "graphql_profile"
+                  },
+                  "headerName" : "*",
+                  "headerOrder" : "default",
+                  "headerValue" : "*",
+                  "type" : "graphql"
+               }
+            ]
+         }
+      ]
+   }
+}

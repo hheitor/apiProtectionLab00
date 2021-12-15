@@ -427,6 +427,12 @@ It is on the same net of your vulnerable GraphQL Machine (check).
 
 #### timestamp 2021121400
 
-5. Configure your WAF to protecto your GraphQL endpoint
+5. Configure your WAF to protect your GraphQL endpoint
+
+
 
 //// AS3 configiration: VS + GraphQL Ready policy ...upload as3 declartion to github////
+
+1. Reviewi aviable VS IP? if tis one nic then will use smae ip address.
+2. make sure port 5000 is open to F5
+3. configure above setting by AS3 declaraion over CURL
