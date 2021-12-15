@@ -14,9 +14,9 @@ Protect vulnerable GraphQL endpoint running in an Azure VM with F5 Advanced WAF
 # Activities: #
 
 1. Create Azure infrastructure using Azure Cloudshell
-2. Deploy GraphQL App - DVGA
-3. Attack it
-4. Deploy F5 Adv WAF from Azure Cloudshell
+2. Create GraphQL application on a linux VM
+3. Do some attacks
+4. Deploy F5 Adv WAF from Azure Cloudshell & configure it declaratively
 5. Attack again an see how F5 protects the app
 
 # Task 1 -  Create Azure resources using Azure CLI
@@ -319,7 +319,7 @@ There are lots of attacks you can do on graphQL endpoints that can compromise un
 
 
 
-  # Task 4 - Deploy F5 Adv WAF to protect GraphQL endpoint
+  # Task 4 - Deploy F5 Adv WAF from Azure Cloudshell & configure it declaratively
 
 1. Create an PAYG instance of 25Mb Advanced WAF by fisrt getting its URN:
 
@@ -350,7 +350,7 @@ az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep
 
   ```
 
-  az vm create -n f51waf01 -g $rg --image f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000 --admin-username azureuser --admin-password fS0n3WAF12345  
+  az vm create -n f51waf01 -g $rg --image f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000 --admin-username azureuser --admin-password <YOU F5 PASSWORD>  
 
 ```
 
@@ -477,14 +477,14 @@ h_heredia@Azure:~$
 
 ```
 
-  ./install-rpm.sh <YOU F5 WAF PUBLIC IP> azureuser:fS0n3WAF12345 /home/h_heredia
+  ./install-rpm.sh <YOU F5 WAF PUBLIC IP> azureuser:<YOU F5 PASSWORD> /home/h_heredia/f5-appsvcs-3.33.0-4.noarch.rpm
 
 ```
 finishing...
 
 
 ```
-./install-rpm.sh 40.86.90.125 azureuser:fS0n3WAF12345 /home/h_heredia/f5-appsvcs-3.33.0-4.noarch.rpm
+./install-rpm.sh <YOU F5 WAF PUBLIC IP> azureuser:<YOU F5 PASSWORD> /home/h_heredia/f5-appsvcs-3.33.0-4.noarch.rpm
 Uploading RPM to https://<F5 WAF PUBLIC IP>:8443/mgmt/shared/file-transfer/uploads/f5-appsvcs-3.33.0-4.noarch.rpm
 Installing f5-appsvcs-3.33.0-4.noarch.rpm on <F5 WAF PUBLIC IP>
 Waiting for /info endpoint to be available
@@ -499,7 +499,7 @@ AS3 is installed, now we can configure f5 declaratively :)
 ```
 a curl -k -X POST https://<YOU F5 WAF PUBLIC IP>:8443/mgmt/shared/authn/login -H "Content-type: application/json"  -H "Host:40.86.90.125" -d '{
     "username":"azureuser",
-    "password":"fS0n3WAF12345",
+    "password":"<YOU F5 PASSWORD>",
     "loginProviderName":"tmos"
 }'
 
@@ -516,7 +516,7 @@ Get it and use it for the next request as value of X-F5-Auth-Token header in ord
 
 ```
 
- curl -k https://40.86.90.125:8443/mgmt/shared/appsvcs/info  -H "Content-type: application/json" -H "Host:40.86.90.125" -H "X-F5-Auth-Token: QYRBXDSCPZW2LGLGEKIB3E23L5"
+ curl -k https://<YOU F5 WAF PUBLIC IP>:8443/mgmt/shared/appsvcs/info  -H "Content-type: application/json" -H "Host:<YOU F5 WAF PUBLIC IP>" -H "X-F5-Auth-Token: <YOUR VALID TOKEN>"
  
 ```
 
@@ -537,7 +537,7 @@ GREAT!!! Lets configure our WAF in a declarative way.
 
 ```
 
- curl -X POST -k https://40.86.90.125:8443/mgmt/shared/appsvcs/declare  -H "Content-type: application/json" -H "Host:40.86.90.125" -H "X-F5-Auth-Token: 2EJQ52UM5UNMSG3QAU7DFTNJGJ" \
+ curl -X POST -k https://40.86.90.125:8443/mgmt/shared/appsvcs/declare  -H "Content-type: application/json" -H "Host:<YOU F5 WAF PUBLIC IP>" -H "X-F5-Auth-Token: <YOUR VALID TOKEN>" \
   -d '{
      "class": "AS3",
      "action": "deploy",
@@ -583,7 +583,7 @@ GREAT!!! Lets configure our WAF in a declarative way.
 
 
   ```
- 6. F5 WAF will confirm back:
+ 9. F5 WAF will confirm back:
 
 
  ```
@@ -597,7 +597,7 @@ GREAT!!! Lets configure our WAF in a declarative way.
 
 
 
- 7. Try accessing your API by curling to it pointing to F5 WAF public ip to port 80:
+ 10. Try accessing your API by curling to it pointing to F5 WAF public ip to port 80:
 
 
  ```
@@ -614,6 +614,9 @@ curl http://<YOU F5 WAF PUBLIC IP> | grep graphql
  We grep so output it is reduced :)
 
 
+11. Now that we publish thru our WAF this graphQL app, let's protect it!
 
+:::::::::;
+::::::::::
 
- 
+ # Task 5 - Attack again an see how F5 protects the app
