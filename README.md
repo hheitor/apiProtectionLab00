@@ -395,7 +395,8 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 ```
 
 #### timestamp 202111290
-```
+
+
 
 5. Validate f5 networking. At the TMSH prompt execute:
 
@@ -433,6 +434,7 @@ On your cloudshell console execute:
 ```
 
 wget https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.33.0/f5-appsvcs-3.33.0-4.noarch.rpm
+
 ```
 
 You'll get this as a result:
