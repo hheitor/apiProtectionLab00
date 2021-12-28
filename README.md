@@ -616,7 +616,13 @@ curl http://<YOU F5 WAF PUBLIC IP> | grep graphql
 
 11. Now that we publish thru our WAF this graphQL app, let's protect it!
 
+external WAF policy
+
+https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/declarations/application-security.html
+
 :::::::::;
 ::::::::::
 
- # Task 5 - Attack again an see how F5 protects the app
+ # Task 5 - Attack again and see how F5 protects the app
+
+ Hola Synnex
