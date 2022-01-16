@@ -69,7 +69,7 @@
             "urlContentProfiles" : [
                {
                   "contentProfile" : {
-                     "name" : "graphql_profile"
+                     "name" : "graphql_profile" ## we hacve to create this content profile 
                   },
                   "headerName" : "*",
                   "headerOrder" : "default",

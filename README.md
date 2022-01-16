@@ -18,8 +18,11 @@ Protect vulnerable GraphQL endpoint running in an Azure VM with F5 Advanced WAF
 3. Do some attacks
 4. Deploy F5 Adv WAF from Azure Cloudshell & configure it using GUI
 5. Attack again an see how F5 protects the app
+6. Delete your created resources
 
 # Task 1 -  Create Azure resources using Azure CLI
+
+This where your role as Cloud admin begins, so let's go!
 
 1. Go to you Azure Portal and click on the shell icon
 2. Make sure Bash is selected (default)
@@ -258,9 +261,6 @@ Also use a browser with the same URL and navigate freely on the interface :)
 
 ```
 
-
-
-
 curl -g \
 -X POST \
 -H "Content-Type: application/json" \
@@ -279,7 +279,7 @@ You should get someting like this:
 As you can see, your GraphQL endpoint works and also allows anyone to know internal networking. Nice point to start target recoinossance. Not cool.
 
 #### Deep Recursion - DoS
-2.  ;;;;VALIDATE IMPACT OF THIS ONE;;;
+2.  Now try to abuse GraphQL parser by making it busy. 
 
 
 ```
@@ -292,31 +292,9 @@ http://<VM Public IP>:5000/graphql
 
 ```
 Note the time it takes to answer this single request. This may lead to DoS increasing the number of requests.
-the next request does a similar effect but tajes more time
-
-#### Resource Intensive Query Attack
- 3.  This query will be more computationally expensive on resourcethan the latter, consuming more time and causing impact on infrastructure.
-  
-
-```
- time curl -g \
- -X POST 
-  -H "Content-Type: application/json" 
-   -d '{"query":"query {\n  systemUpdate\n}","variables":[]}' http://23.101.113.30:5000/graphql
-  
-
-```
-It took a little time huh?
-
-```
-
-{"data":{"systemUpdate":"no updates available"}}
-real    0m50.288s
-user    0m0.011s
-sys     0m0.000s
 
 
-```
+
 There are lots of attacks you can do on graphQL endpoints that can compromise underlying infrastructure so yes, you need to protect them as well with WAF that understands this arcitectural style.
 
 
@@ -355,7 +333,7 @@ az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep
   az vm create -n f51waf01 -g $rg --image f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000 --admin-username azureuser --admin-password  <YOU F5 PASSWORD>  
   
 
-```
+  ```
 
 Output shall be similar to this:
 
@@ -371,9 +349,10 @@ Output shall be similar to this:
   "resourceGroup": "hhRGlab",
   "zones": ""
 }
+
 ```
 
-Please note WAF VM private & public IP 
+*Please note WAF VM private & public IP *
 
 4. Test your WAF using predefined credentials:
 
@@ -427,12 +406,12 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 
 ```
 
-It is on the same net of your vulnerable GraphQL Machine. We will use that IP as pool member in our AS3 declaration
+It is on the same net of your vulnerable GraphQL Machine.  
 
 #### timestamp 2021121400
 
 
-6  open ports  8443&80 for f5
+6  Open ports  8443 & 80 for f5
 
 ```
 
@@ -440,28 +419,138 @@ az vm open-port -g $rg -n f51waf01 --port 8443 priority 100
 az vm open-port -g $rg -n f51waf01 --port 80 priority 101
 
 ```
-### tiemstamp 202111290
+### tiemstamp 2022011600
 Now your role as Cloud admin has finished. Let's put the SecOps cap!
 
-7. Configure your F5 to publish your GraphQL endpoint using GUI. 
+###Configure your F5 to publish your GraphQL endpoint using GUI. 
 
 
+*** Guided configuration doesnt allow to use the only existing Self-IP. since this is one nic deployemnt, will go old school on this.
 
+1. Using a browser, Sign in using the credentials: azureuser/<password>  at https://<WAFIP>:8443
+**Note port 8443
 
-
- We grep so output it is reduced :)
-
-
-11. Now that we publish thru our WAF this graphQL app, let's protect it!
+2. Make sure resource provsiniong has: ASM - Nominal,  MGMT - Medium. If that's not the case set them that way 
  
-For this time it is important to do configs  on GUI for you to see the improvement TMOS 16.1 has on our WAF.
-Obviusly, may be your business needs to do changes via REST API to  f5 WAF so please visit this site to <F% REST API LINK REFERENICE> for more info about security poolicies suing AS3
+2. Go to Security > Application Security > Security Policies and Clik the + button.
 
-12. Open a browser to your f5 Public IP usingHTTPS & port 8443 (Remember we deployed 1NIC F5 for this exercise so 443 is reserver for traffic)
+3. On General Settings use:
 
+  Policy Name: mygqlpolicy1
+  Description: graphQl endpoint protection
+  Policy template: GraphQL Policy
+  Virtual Server: click on + Configure New Virtual Server
+    Virtual Server Name: vs_graphql_sec
+    HTTP Virtual Server Destination : 10.0.0.7
+      Service Port: HTTP
+    HTTP Pool Member: 
+      New Node: 10.0.0.5
+      Service Port: 5000
+  GraphQL Endpoints: Click on +  Create New GraphQL Endpoint in "Allowed URLs"
+    URL: HTTP POST /graphql
+    Click Create  
+  
+  Logging Profiles: Log illegal requests
+  Enforcement Mode: Blocking
+  Signature Staging: Disabled
+
+  Click Save
+
+4. You've publish now your app with security. Let's see the objects that were created. Go to Local Traffic  ››  Virtual Servers : Virtual Server List an click vs_graphql virtual server
+
+5. Go to Security > Policies  and you'll see Application Security Policy is enabled and Policy: mygqlpolicy1 is applied.
+As you can see, we can extend protection capabilites like IP intenlligence, DoS protection & bot Protection to maximize security 
+depending on your needs an threat  model.
+
+6. Let's go back to your app policy to keep tunning it. Go to Security  ››  Application Security : Security Policies : Policies List and click mygqlpolicy1.
+
+7. On GraphQL Endpoints click + Create New GraphQL Endpoint in "Allowed URLs"
+  URL: HTTP POST /graphql 
+  click create
+
+8. Select your URL and click Enforce then click Ok
+
+9.Click engine icon besides mygqlpolicy1 to go back to your policy
+
+10. On Learning and Blocking click Learning and Blocking Settings
+
+11. On attack signatures go to Signature Set category and click change.
+
+12. On Select Policy Attack Signature Sets window enable:
+
+  	OS Command Injection Signatures
+    and click Change  
+
+    and uncheck Enable Signature Staging **Important!!]
+
+13. Click save then click Apply Policy
+14. Go to Security  ››  Application Security : Content Profiles : GraphQL Profiles and click Default
+15. On Maximum Structure Depth set a value of '10'. Click Update and then Apply policy
+
+# 5 - Attack again an see how F5 protects the app
+
+### Do attacks again, now to the graphQL app publish & protected by f5
+
+1. Try Command execution again.
+
+ You're pointing now to the graphql app published by f5, so use its 
+ IP and port 80
+```
+
+
+curl -g \
+-X POST \
+-H "Content-Type: application/json" \
+-d '{"query":"mutation {importPaste(host:\"localhost\", port:80, path:\"/ ; netstat -ar\", scheme:\"http\"){result}}"}' \
+http://<VM Public IP>graphql
 
 ```
-https://<YOUR F5 PUBLIC IP>:8443  
+
+you-ll get this:
+
+```
+ 
+  "errors": [
+    {
+      "message": "The requested query was rejected. Please consult with your administrator. Your support ID is: 1213456921160318980"
+    }
+  ]
 
 ```
 
+2. Go to Security  ››  Event Logs : Application : Requests and you''l see request details. you can see 'netstat' is detected as the sting that triggered the violation.
+
+3. Execute a Deep recursion attack now.
+
+```
+
+curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query {pastes {owner {paste {edges {node {owner {paste {edges {node {owner {paste {edges {node {owner {id}}}}}}}}}}}}}}}"}' http://<WAFIP>/graphql
+
+```
+
+As per WAF content GraphQL content profile configuration,you are not allowed to go deeper than 5 levels so
+
+```
+"errors": [
+    {
+      "message": "The requested query was rejected. Please consult with your administrator. Your support ID is: 1213456921160318988"
+    }
+  ]
+
+```
+4. FINISHED!!!
+
+As you can see, protecting graphQL endpoint swith F5 is fast & easy. 
+
+# Task 6 - Delete your resources 
+
+1. in your Azure cloud shell execute:
+
+```
+az group delete --name $rg
+Are you sure you want to perform this operation? (y/n): y
+
+```
+it may take several minutes.
+
+when it's done you'll get this output:
