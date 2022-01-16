@@ -326,7 +326,7 @@ az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep
 
 ```
 
-3. create your f5 WAF:
+3. Create your f5 WAF:
 
   ```
 
@@ -422,13 +422,13 @@ az vm open-port -g $rg -n f51waf01 --port 80 priority 101
 ### tiemstamp 2022011600
 Now your role as Cloud admin has finished. Let's put the SecOps cap!
 
-###Configure your F5 to publish your GraphQL endpoint using GUI. 
+### Configure your F5 to publish your GraphQL endpoint using GUI. 
 
 
-*** Guided configuration doesnt allow to use the only existing Self-IP. since this is one nic deployemnt, will go old school on this.
 
-1. Using a browser, Sign in using the credentials: azureuser/<password>  at https://<WAFIP>:8443
-**Note port 8443
+1. Using a browser, Sign in using the credentials: azureuser/<YOUR WAF PASSWORD> at https://<WAFIP>:8443
+
+**Note port 8443 since this a 1 NIC deployment
 
 2. Make sure resource provsiniong has: ASM - Nominal,  MGMT - Medium. If that's not the case set them that way 
  
