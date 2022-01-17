@@ -1,11 +1,10 @@
-# apiProtectionLabAlpha
+# apiProtectionLabBeta
 # Protecting APIs in Azure  with F5#
 
-Welcome to API protection Lab. This time you'll work with GraphQL APIs running in an ACI (Azure Container Instance)
+Welcome to API protection Lab. This time you'll work with GraphQL endpoint running in Linux VM instance on Azure
 
 # Pre-requisites
 - An azure account
-- F5 Advanced WAF BIG-IP Trial License
 
 # GOAL: 
 
