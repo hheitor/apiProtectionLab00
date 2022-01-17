@@ -39,8 +39,8 @@ See Name column and select the location  that makes more sense to  you. In this 
 
 ```
 
-location=entralus
-rg=hhRGlab
+location=centralus
+rg=<YOUR INITIALS>RGlab
 vm=graphqlVM
 
 
@@ -376,9 +376,6 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 
 ```
 
-#### timestamp 202111290
-
-
 
 5. Validate f5 networking. At the TMSH prompt execute:
 
@@ -408,8 +405,6 @@ azureuser@(localhost)(cfg-sync Standalone)(Active)(/Common)(tmos)#
 
 It is on the same net of your vulnerable GraphQL Machine.  
 
-#### timestamp 2021121400
-
 
 6  Open ports  8443 & 80 for f5
 
@@ -419,7 +414,6 @@ az vm open-port -g $rg -n f51waf01 --port 8443 priority 100
 az vm open-port -g $rg -n f51waf01 --port 80 priority 101
 
 ```
-### tiemstamp 2022011600
 Now your role as Cloud admin has finished. Let's put the SecOps cap!
 
 ### Configure your F5 to publish your GraphQL endpoint using GUI. 
@@ -487,7 +481,7 @@ depending on your needs an threat  model.
 14. Go to Security  ››  Application Security : Content Profiles : GraphQL Profiles and click Default
 15. On Maximum Structure Depth set a value of '10'. Click Update and then Apply policy
 
-# 5 - Attack again an see how F5 protects the app
+# Task 5 - Attack again an see how F5 protects the app
 
 ### Do attacks again, now to the graphQL app publish & protected by f5
 
@@ -553,4 +547,3 @@ Are you sure you want to perform this operation? (y/n): y
 ```
 it may take several minutes.
 
-when it's done you'll get this output:
