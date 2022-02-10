@@ -435,12 +435,12 @@ Now your role as Cloud admin has finished. Let's put the SecOps cap!
   - Virtual Server: click on + Configure New Virtual Server
   - Virtual Server Name: vs_graphql_sec
   - HTTP Virtual Server Destination : 10.0.0.7
-      Service Port: HTTP
+      - Service Port: HTTP
   - HTTP Pool Member: 
-      *New Node: 10.0.0.5
-      *Service Port: 5000
+      - New Node: 10.0.0.5
+      - Service Port: 5000
   - GraphQL Endpoints: Click on +  Create New GraphQL Endpoint in "Allowed URLs"
-    *URL: HTTP POST /graphql
+    - URL: HTTP POST /graphql
     - Click Create  
   
   - Logging Profiles: Log illegal requests
