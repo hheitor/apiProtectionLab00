@@ -429,23 +429,23 @@ Now your role as Cloud admin has finished. Let's put the SecOps cap!
 
 3. On General Settings use:
 
-  Policy Name: mygqlpolicy1
-  Description: graphQl endpoint protection
-  Policy template: GraphQL Policy
-  Virtual Server: click on + Configure New Virtual Server
-    Virtual Server Name: vs_graphql_sec
-    HTTP Virtual Server Destination : 10.0.0.7
+  - Policy Name: mygqlpolicy1
+  - Description: graphQl endpoint protection
+  - Policy template: GraphQL Policy
+  - Virtual Server: click on + Configure New Virtual Server
+  - Virtual Server Name: vs_graphql_sec
+  - HTTP Virtual Server Destination : 10.0.0.7
       Service Port: HTTP
-    HTTP Pool Member: 
+  - HTTP Pool Member: 
       New Node: 10.0.0.5
       Service Port: 5000
-  GraphQL Endpoints: Click on +  Create New GraphQL Endpoint in "Allowed URLs"
+  - GraphQL Endpoints: Click on +  Create New GraphQL Endpoint in "Allowed URLs"
     URL: HTTP POST /graphql
     Click Create  
   
-  Logging Profiles: Log illegal requests
-  Enforcement Mode: Blocking
-  Signature Staging: Disabled
+  - Logging Profiles: Log illegal requests
+  - Enforcement Mode: Blocking
+  - Signature Staging: Disabled
 
   Click Save
 
@@ -511,7 +511,7 @@ you-ll get this:
 
 ```
 
-2. Go to Security  ››  Event Logs : Application : Requests and you''l see request details. you can see 'netstat' is detected as the sting that triggered the violation.
+2. Go to Security  ››  Event Logs : Application : Requests and you''l see request details. you can see 'netstat' is detected as the string that triggered the violation.
 
 3. Execute a Deep recursion attack now.
 
@@ -521,7 +521,7 @@ curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query {pastes 
 
 ```
 
-As per WAF content GraphQL content profile configuration,you are not allowed to go deeper than 5 levels so
+As per WAF content GraphQL content profile configuration,you are not allowed to go deeper than 10 levels so
 
 ```
 "errors": [
