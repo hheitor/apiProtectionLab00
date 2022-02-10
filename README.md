@@ -463,7 +463,7 @@ depending on your needs an threat  model.
 
 8. Select your URL and click Enforce then click Ok
 
-9.Click engine icon besides mygqlpolicy1 to go back to your policy
+9. Click engine icon besides mygqlpolicy1 to go back to your policy
 
 10. On Learning and Blocking click Learning and Blocking Settings
 
