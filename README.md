@@ -437,11 +437,11 @@ Now your role as Cloud admin has finished. Let's put the SecOps cap!
   - HTTP Virtual Server Destination : 10.0.0.7
       Service Port: HTTP
   - HTTP Pool Member: 
-      New Node: 10.0.0.5
-      Service Port: 5000
+      *New Node: 10.0.0.5
+      *Service Port: 5000
   - GraphQL Endpoints: Click on +  Create New GraphQL Endpoint in "Allowed URLs"
-    URL: HTTP POST /graphql
-    Click Create  
+    *URL: HTTP POST /graphql
+    - Click Create  
   
   - Logging Profiles: Log illegal requests
   - Enforcement Mode: Blocking
