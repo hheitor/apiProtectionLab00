@@ -167,8 +167,8 @@ az vm open-port -g $rg -n $vm --port 5000
       "destinationPortRange": "*",
       "destinationPortRanges": [],
       "direction": "Inbound",
-      "etag": "W/\"6f2b9f76-1388-4a81-86e8-e933e7dc7c0a\"",
-      "id": "/subscriptions/75f86c46-9cbc-4f6c-85ea-195e3d3c8ac0/resourceGroups/hhRGlab/providers/Microsoft.Network/networkSecurityGroups/graphqlVMNSG/defaultSecurityRules/AllowVnetInBound",
+      "etag": "W/\"<ETAG>"",
+      "id": "/subscriptions/<NONE OF YOUR BUSINESS>/resourceGroups/hhRGlab/providers/Microsoft.Network/networkSecurityGroups/graphqlVMNSG/defaultSecurityRules/AllowVnetInBound",
       "name": "AllowVnetInBound",
       "priority": 65000,
       "protocol": "*",
@@ -181,7 +181,7 @@ az vm open-port -g $rg -n $vm --port 5000
       "sourcePortRanges": [],
      
    
-      "id": "/subscriptions/75f86c46-9cbc-4f6c-85ea-195e3d3c8ac0/resourceGroups/hhRGlab/providers/Microsoft.Network/networkSecurityGroups/graphqlVMNSG/defaultSecurityRules/DenyAllOutBound",
+      "id": "/subscriptions/<NONE OF YOUR BUSINESS>/resourceGroups/hhRGlab/providers/Microsoft.Network/networkSecurityGroups/graphqlVMNSG/defaultSecurityRules/DenyAllOutBound",
       "name": "DenyAllOutBound",
       "priority": 65500,
       "protocol": "*",
