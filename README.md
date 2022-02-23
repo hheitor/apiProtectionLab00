@@ -82,7 +82,7 @@ You'll get somehitng like this:
 
 ```
 
-az vm create -g $rg -n $vm --image "UbuntuLTS" --admin-username "azureuser" --generate-ssh-keys --tags owner[=<YOUR INITIALS>]
+az vm create -g $rg -n $vm --image "UbuntuLTS" --admin-username "azureuser" --generate-ssh-keys --tags "owner=YOURINITIALS"
 
 ```
 
@@ -124,9 +124,8 @@ ssh -i id_rsa azureuser@<YOUR VM PUBLIC IP>
 
 ```
  sudo apt-get update 
- sudo  apt-get install -y docker.io 
- sudo  docker pull dolevf/dvga 
- sudo docker run -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga -d
+ sudo apt-get install -y docker.io 
+ sudo docker run -d -t -p 5000:5000 -e WEB_HOST=0.0.0.0 dolevf/dvga 
  sudo docker ps
 
 ```
@@ -275,7 +274,7 @@ You should get someting like this:
 "data":{"importPaste":{"result":"Kernel IP routing table\nDestination     Gateway         Genmask         Flags   MSS Window  irtt Iface\ndefault         X.X.X.X     0.0.0.0         UG        0 0          0 NIC\nX.X.X.X     *               255.255.255.0   U         0 0          0 NIC\n"}}}
 ```
 
-As you can see, your GraphQL endpoint works and also allows anyone to know internal networking. Nice point to start target recoinossance. Not cool.
+As you can see, your GraphQL endpoint works and also allows anyone to know internal networking. Nice point to start target reconnaissance. Not cool.
 
 #### Deep Recursion - DoS
 2.  Now try to abuse GraphQL parser by making it busy. 
@@ -329,7 +328,7 @@ az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep
 
   ```
 
-  az vm create -n f51waf01 -g $rg --image f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000 --admin-username azureuser --admin-password  <YOU F5 PASSWORD>  
+  az vm create -n f51waf01 -g $rg --image f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000 --admin-username azureuser --admin-password  <YOU F5 PASSWORD>  --tags "owner=YOURINITIALS"
   
 
   ```
@@ -409,8 +408,8 @@ It is on the same net of your vulnerable GraphQL Machine.
 
 ```
 
-az vm open-port -g $rg -n f51waf01 --port 8443 priority 100
-az vm open-port -g $rg -n f51waf01 --port 80 priority 101
+az vm open-port -g $rg -n f51waf01 --port 8443 --priority 100
+az vm open-port -g $rg -n f51waf01 --port 80 --priority 101
 
 ```
 Now your role as Cloud admin has finished. Let's put the SecOps cap!
