@@ -1,4 +1,4 @@
-# apiProtectionLabBeta
+# apiProtectionLab
 # Protecting APIs in Azure  with F5#
 
 Welcome to API protection Lab. This time you'll work with GraphQL endpoint running in Linux VM instance on Azure
@@ -15,13 +15,12 @@ Protect vulnerable GraphQL endpoint running in an Azure VM with F5 Advanced WAF
 1. Create Azure infrastructure using Azure Cloudshell
 2. Create GraphQL application on a linux VM
 3. Do some attacks
-4. Deploy F5 Adv WAF from Azure Cloudshell & configure it using GUI
+4. Deploy F5 Adv. WAF from Azure Cloudshell & configure it using GUI
 5. Attack again an see how F5 protects the app
 6. Delete your created resources
 
 # Task 1 -  Create Azure resources using Azure CLI
 
-This where your role as Cloud admin begins, so let's go!
 
 1. Go to you Azure Portal and click on the shell icon
 2. Make sure Bash is selected (default)
@@ -268,7 +267,7 @@ http://<VM Public IP>:5000/graphql
 ```
 PLEASE DO NOT FORGET PORT 5000
 
-You should get someting like this:
+You should get something like this:
 
 ```
 "data":{"importPaste":{"result":"Kernel IP routing table\nDestination     Gateway         Genmask         Flags   MSS Window  irtt Iface\ndefault         X.X.X.X     0.0.0.0         UG        0 0          0 NIC\nX.X.X.X     *               255.255.255.0   U         0 0          0 NIC\n"}}}
@@ -293,13 +292,13 @@ Note the time it takes to answer this single request. This may lead to DoS incre
 
 
 
-There are lots of attacks you can do on graphQL endpoints that can compromise underlying infrastructure so yes, you need to protect them as well with WAF that understands this arcitectural style.
+There are lots of attacks you can do on QraphQL endpoints that can compromise underlying infrastructure so yes, you need to protect them as well with WAF that understands this arcitectural style.
 
 
 
-  # Task 4 - Deploy F5 Adv WAF from Azure Cloudshell & configure it using GUI
+  # Task 4 - Deploy F5 Adv. WAF from Azure Cloudshell & configure it using GUI
 
-1. Create an PAYG instance of 25Mb Advanced WAF by fisrt getting its URN:
+1. Create an PAYG instance of 25Mb Advanced WAF by first getting its URN:
 
  ```
 az vm image list --publisher f5-networks --all 
@@ -311,13 +310,13 @@ az vm image list --publisher f5-networks --all
 
   Version 16.x includes GraphQL filters to better protect this traffic.
 
-2. Filter ouput using this command:
+2. Filter output using this command:
 
 ```
 az vm image list --publisher f5-networks --all | grep 25m | grep 16\.1\.1 | grep awf
 
 ```
- your URN of interese shall be:
+ your URN of interest shall be:
 
  ```
  "urn": "f5-networks:f5-big-ip-advanced-waf:f5-big-awf-plus-hourly-25mbps:16.1.100000"
@@ -412,7 +411,6 @@ az vm open-port -g $rg -n f51waf01 --port 8443 --priority 100
 az vm open-port -g $rg -n f51waf01 --port 80 --priority 101
 
 ```
-Now your role as Cloud admin has finished. Let's put the SecOps cap!
 
 ### Configure your F5 to publish your GraphQL endpoint using GUI. 
 
@@ -485,7 +483,7 @@ depending on your needs an threat  model.
 
 1. Try Command execution again.
 
- You're pointing now to the graphql app published by f5, so use its 
+ You're pointing now to the GraphQL app published by f5, so use its 
  IP and port 80
 ```
 
@@ -498,7 +496,7 @@ http://<VM Public IP>graphql
 
 ```
 
-you-ll get this:
+you'll get this:
 
 ```
  
@@ -520,7 +518,7 @@ curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query {pastes 
 
 ```
 
-As per WAF content GraphQL content profile configuration,you are not allowed to go deeper than 10 levels so
+As per WAF content GraphQL content profile configuration,you are not allowed to go deeper than 10 levels so:
 
 ```
 "errors": [
@@ -532,7 +530,7 @@ As per WAF content GraphQL content profile configuration,you are not allowed to 
 ```
 4. FINISHED!!!
 
-As you can see, protecting graphQL endpoint swith F5 is fast & easy. 
+As you can see, protecting GraphQL endpoints with F5 is fast & easy. 
 
 # Task 6 - Delete your resources 
 
@@ -543,5 +541,5 @@ az group delete --name $rg
 Are you sure you want to perform this operation? (y/n): y
 
 ```
-it may take several minutes.
+It may take several minutes.
 
