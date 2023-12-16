@@ -81,7 +81,7 @@ You'll get somehitng like this:
 
 ```
 
-az vm create -g $rg -n $vm --image "UbuntuLTS" --admin-username "azureuser" --generate-ssh-keys --tags "owner=YOURINITIALS"
+az vm create -g $rg -n $vm --image "Ubuntu2204" --admin-username "azureuser" --generate-ssh-keys --tags "owner=YOURINITIALS"
 
 ```
 
